@@ -1,0 +1,7 @@
+{
+  "bins": [
+    { "id": 1, "random_id": "abcd123" },
+    { "id": 2, "random_id": "efgh456" },
+    { "id": 3, "random_id": "ijkl789" }
+  ]
+}
