@@ -73,4 +73,33 @@ apiRouter.post('/bins', async (req, res) => {
   }
 });
 
+// GET /api/bins/:id
+apiRouter.get('/bins/:id', async (req, res) => {
+  const binID = req.params.id;
+  // replace pgQueries method with PG method from './config/db'
+  // how do we want to join together all of the needed bin info and requests
+  // for each bin, and return that all together?
+  const bin = await pgQueries.getBin(binID);
+  if (bin) {
+    res.json(bin);
+  } else {
+    res.status(404).send(`Bin "${binID}" could not be found.`);
+  }
+});
+
+// DELETE /api/bins/:id
+apiRouter.delete('/bins/:id', async (req, res) => {
+  const binID = req.params.id;
+  // replace pgQueries method with PG method from './config/db'
+  // how do we want to delete on cascade all of the requisite bin info from
+  // both PG and MD?
+  const bin = await pgQueries.getBin(binID);
+  if (bin) {
+    await pgQueries.deleteBin(binID);
+    res.sendStatus(204);
+  } else {
+    res.status(404).send(`Bin "${binID}" could not be found.`);
+  }
+});
+
 module.exports = apiRouter;
