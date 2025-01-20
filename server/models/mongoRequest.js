@@ -5,4 +5,4 @@ const PayloadSchema = new mongoose.Schema({
     payload: { type: String },
 });
 
-module.exports = mongoose.model('MongoPayload', PayloadSchema);
+module.exports = mongoose.model('MongoRequest', PayloadSchema);
