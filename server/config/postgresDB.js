@@ -38,7 +38,6 @@ const createPGDatabase = async () => {
 const createPGTables = async () => {
     const schemaPath = path.join(__dirname, "../db/schema.sql");
     const schemaSql = fs.readFileSync(schemaPath, "utf8");
-    console.log(schemaSql);
     let client;
 
     try {
