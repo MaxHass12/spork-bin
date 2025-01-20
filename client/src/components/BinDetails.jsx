@@ -1,0 +1,23 @@
+import { useEffect, useState } from 'react';
+
+function BinDetails({ bins }) {
+  const [bin, setBin] = useState(null);
+
+  useEffect(() => {
+    const path = window.location.pathname.split('/');
+    const randomId = path[path.length - 1];
+    const bin = bins.find(
+      (bin) => bin.random_id === randomId || bin.newBinId === randomId
+    );
+    setBin(bin);
+  }, [bins]);
+
+  return (
+    <div>
+      <h1>Bin Details Should Be Displayed</h1>
+      <pre>{JSON.stringify(bin, null, 2)}</pre>
+    </div>
+  );
+}
+
+export default BinDetails;
