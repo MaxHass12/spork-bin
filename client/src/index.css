@@ -142,6 +142,36 @@ ul {
   outline: none; /* Remove focus outline */
 }
 
+.card-button-alt {
+  background-color: #ffffff; /* White background */
+  color: #333; /* Dark text for contrast */
+  padding: 0.4rem 0.7rem; /* Same padding as the original button */
+  border: 2px solid #333; /* Add a border for definition */
+  border-radius: 5px; /* Consistent rounded corners */
+  margin-left: 0.5%; /* Maintain spacing */
+  font-size: 1rem; /* Same font size for consistency */
+  font-weight: bold; /* Bold text */
+  cursor: pointer; /* Pointer cursor on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.card-button-alt:hover {
+  background-color: #f0f0f0; /* Light gray on hover */
+  color: #000; /* Slightly darker text on hover */
+  transform: scale(1.05); /* Subtle zoom effect */
+}
+
+.card-button-alt:focus {
+  outline: 2px solid #004d00; /* Green outline for focus */
+  outline-offset: 2px;
+}
+
+.card-button-alt:active {
+  background-color: #e0e0e0; /* Darker gray for active state */
+  transform: scale(0.95); /* Press effect */
+}
+
 /* Side List */
 .side-list {
   flex: 1;
@@ -167,27 +197,49 @@ ul {
   border-radius: 5px;
 }
 
-/* Dialog styling */
-.modal {
-  border: none;
-  padding: 0;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 300px;
-  max-width: 90%;
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Dialog backdrop */
-.modal::backdrop {
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent backdrop */
-}
-
-/* Modal content styling */
 .modal-content {
-  background-color: white;
-  padding: 2rem;
+  background: white;
+  padding: 20px;
   border-radius: 8px;
-  text-align: center;
+  position: relative;
+  max-width: 500px;
+  height: 25%;
+  width: 100%;
+}
+
+.modal-content p {
+  font-size: larger;
+}
+
+.modal-buttons {
+  position: absolute; /* Absolute positioning within the relative container */
+  bottom: 20px; /* Distance from the bottom edge */
+  right: 20px; /* Distance from the right edge */
+  /* height: 40px; */
+  display: flex; /* Use flexbox to arrange buttons side by side */
+  gap: 10px;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
 }
 
 /* Button styling */

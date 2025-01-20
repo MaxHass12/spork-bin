@@ -1,29 +1,16 @@
-import React, { useRef } from 'react';
-
-const BinCreationModal = ({ isOpen, onClose }) => {
-  const dialogRef = useRef(null);
-
-  // Close the dialog when clicked outside
-  const handleOutsideClick = (e) => {
-    if (e.target === dialogRef.current) {
-      onClose();
-    }
-  };
+function BinCreationModal({ isOpen, onClose, children }) {
+  if (!isOpen) return null;
 
   return (
-    <dialog
-      className="modal"
-      ref={dialogRef}
-      open={isOpen}
-      onClick={handleOutsideClick}
-    >
-      <div className="modal-content">
-        <h2>Modal Title</h2>
-        <p>This is a modal using the native dialog element.</p>
-        <button onClick={onClose}>Close</button>
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <button className="close-button" onClick={onClose}>
+          &times;
+        </button>
+        {children}
       </div>
-    </dialog>
+    </div>
   );
-};
+}
 
 export default BinCreationModal;

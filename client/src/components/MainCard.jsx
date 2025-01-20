@@ -1,19 +1,74 @@
 import { DOMAIN_NAME } from '../App';
 import BinCreationModal from './BinCreationModal';
 import { useState } from 'react';
+import { createNewBin } from '../service/bins.service';
 
-function MainCard({ newRandomBinID }) {
+function MainCard({ newRandomBinID, setBins }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isNewBinCreationSuccess, setIsNewBinCreationSuccess] = useState(null);
 
   const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
 
-  const handleFormSubmit = (event) => {
+  const closeModal = (event) => {
     event.preventDefault();
     event.stopPropagation();
 
+    setIsModalOpen(false);
+    setIsNewBinCreationSuccess(null);
+  };
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    try {
+      const newBinDetails = await createNewBin(newRandomBinID);
+      setIsNewBinCreationSuccess(true);
+      setBins((prev) => [...prev, newBinDetails]);
+    } catch (err) {
+      setIsNewBinCreationSuccess(false);
+      console.log(err);
+    }
+
     openModal();
   };
+
+  const handleOpenBasket = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    console.log('BASKET WILL BE OPENED', newRandomBinID);
+  };
+
+  const SuccessModalContent = () => {
+    return (
+      <>
+        <p>Bin &quot;{newRandomBinID}&quot; is successfully created !</p>
+        <div className="modal-buttons">
+          <button className="card-button-alt" onClick={closeModal}>
+            Close
+          </button>
+          <button className="card-button" onClick={handleOpenBasket}>
+            Open Basket
+          </button>
+        </div>
+      </>
+    );
+  };
+
+  const ErrorModalContent = () => {
+    return (
+      <>
+        <p>Error While Creating Bin</p>
+        <div className="modal-buttons">
+          <button className="card-button-alt" onClick={closeModal}>
+            Close
+          </button>
+        </div>
+      </>
+    );
+  };
+
   return (
     <div className="main-card">
       <h1>Create New Bin</h1>
@@ -29,7 +84,13 @@ function MainCard({ newRandomBinID }) {
         <button type="submit" className="card-button">
           Create
         </button>
-        <BinCreationModal isOpen={isModalOpen} onClose={closeModal} />
+        <BinCreationModal isOpen={isModalOpen} onClose={closeModal}>
+          {isNewBinCreationSuccess ? (
+            <SuccessModalContent />
+          ) : (
+            <ErrorModalContent />
+          )}
+        </BinCreationModal>
       </form>
     </div>
   );

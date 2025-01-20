@@ -43,7 +43,7 @@ function App() {
       <MainNav handleGetNewBin={handleGetNewBin} />
 
       <div className="container">
-        <MainCard newRandomBinID={newRandomBinId} />
+        <MainCard newRandomBinID={newRandomBinId} setBins={setBins} />
         <SideList bins={bins} />
       </div>
     </>
