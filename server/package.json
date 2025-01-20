@@ -17,6 +17,8 @@
   "homepage": "https://github.com/MaxHass12/spork-bin#readme",
   "description": "",
   "dependencies": {
-    "express": "^4.21.2"
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "pg": "^8.13.1"
   }
 }
