@@ -24,8 +24,9 @@ function createNewBinID() {
   return binID;
 }
 
-function binIDInUse(binID) {
-  // check if `binID` already exists in the PG `bins` table
+function binIDInUse(binID, allBins) {
+  let allBinIDs = allBins.map(bin => bin.random_id);
+  return allBinIDs.includes(binID);
 }
 
 function isValidBinID(binID) {

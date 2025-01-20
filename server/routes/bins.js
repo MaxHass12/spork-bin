@@ -1,10 +1,12 @@
 const binsRouter = require('express').Router();
+const { connectMongoDB } = require('../config/mongoDB');
+const { createPGDatabase, createPGTables, pgQueries } = require('../config/postgresDB');
 const { isValidBinID, binIDInUse } = require('../utils/utils');
-// require functions from './config/db' to connect to MongoDB and PostgreSQL
 
-// invoke functions from './config/db' to connect to MongoDB and PostgreSQL
+connectMongoDB();
+createPGDatabase();
+createPGTables();
 
-// POST /bins/:id
 binsRouter.post('/:id', async (req, res) => {
   const binID = req.params.id;
   const { method, headers, body } = req;
@@ -12,25 +14,27 @@ binsRouter.post('/:id', async (req, res) => {
   const date = timestamp.match(/[A-Z]{1}[a-z]{2} \d{2} \d{4}/)[0];
   const time = timestamp.match(/\d{2}:\d{2}:\d{2}/)[0];
 
+  let allBins = await pgQueries.getAllBins();
+
+  // code for testing route
   // console.log(binID, method, headers, body, date, time);
   // res.status(200).send();
   
-  if (isValidBinID(binID) && binIDInUse(binID)) {
-    // replace MongoRequest w/ actual MongoDB model export
-    const newRequestBody = new MongoRequest({ body });
+  if (isValidBinID(binID) && binIDInUse(binID, allBins)) {
+    const newBinRequest = await pgQueries.addRequest(binID, method, headers, date, time);
+    const request_id = newBinRequest.id;
+    const newRequestBody = new MongoRequest({ request_id, payload: body });
     await newRequestBody.save();
-    // need to add MongoID attribute to `requests` table and `addRequest` method
-    const newBinRequest = await pgQueries.addRequest(binID, method, headers, date, time, newRequestBody['_id']);
     const requestInfo = {
       method: newBinRequest.method,
       date: newBinRequest.date,
       time: newBinRequest.time,
       headers: newBinRequest.headers,
-      body: newRequestBody['body'],
+      body: newRequestBody['payload'],
     }
     res.status(201).json(requestInfo);
   } else {
-    res.status(400).send(`Invalid bin ID (${binID}) in URL`);
+    res.status(400).send(`Couldn't complete request. Invalid bin ID (${binID}) in URL`);
   }
 });
 
