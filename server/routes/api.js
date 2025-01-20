@@ -1,14 +1,14 @@
 const apiRouter = require('express').Router();
 const { connectMongoDB } = require('../config/mongoDB');
-const { createPGDatabase, createPGTables, pgQueries } = require('../config/postgresDB');
+const { createPGTables, pgQueries } = require('../config/postgresDB');
 const { 
   createNewBinID, 
   binIDInUse, 
   isValidBinID
 } = require('../utils/utils');
+const { MongoRequest } = require('../models/mongoRequest');
 
 connectMongoDB();
-createPGDatabase();
 createPGTables();
 
 // GET /api/new_bin_id (to get a new random_id)
@@ -34,7 +34,8 @@ apiRouter.get('/bins', async (req, res) => {
 
 apiRouter.post('/bins', async (req, res) => {
   let { newBinID } = req.body;
-  if (isValidBinID(newBinID) && !binIDInUse(newBinID)) {
+  let allBins = await pgQueries.getAllBins();
+  if (isValidBinID(newBinID) && !binIDInUse(newBinID, allBins)) {
     const newBin = await pgQueries.addBin(newBinID);
     res.status(201).json(newBin);
   } else {

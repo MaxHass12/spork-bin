@@ -1,10 +1,10 @@
 const binsRouter = require('express').Router();
 const { connectMongoDB } = require('../config/mongoDB');
-const { createPGDatabase, createPGTables, pgQueries } = require('../config/postgresDB');
+const { createPGTables, pgQueries } = require('../config/postgresDB');
 const { isValidBinID, binIDInUse } = require('../utils/utils');
 
 connectMongoDB();
-createPGDatabase();
+// createPGDatabase();
 createPGTables();
 
 binsRouter.post('/:id', async (req, res) => {
@@ -17,8 +17,8 @@ binsRouter.post('/:id', async (req, res) => {
   let allBins = await pgQueries.getAllBins();
 
   // code for testing route
-  // console.log(binID, method, headers, body, date, time);
-  // res.status(200).send();
+  console.log(binID, method, headers, body, date, time);
+  res.status(200).send();
   
   if (isValidBinID(binID) && binIDInUse(binID, allBins)) {
     const newBinRequest = await pgQueries.addRequest(binID, method, headers, date, time);

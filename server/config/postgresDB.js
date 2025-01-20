@@ -19,21 +19,21 @@ const pool = new Pool({
     port: process.env.PG_PORT,
 });
 
-const createPGDatabase = async () => {
-    let client;
-    try {
-        client = await setupPool.connect();
-        const query = 'SELECT 1 FROM pg_database WHERE datname = $1';
-        await client.query(query, [process.env.PG_DATABASE]);
-        console.log('Database exists')
-    } catch (error) {
-        console.log('Database not found. Creating...')
-        await client.query(`CREATE DATABASE ${process.env.PG_DATABASE}`);
-    } finally {
-        client.release();
-        await setupPool.end();
-    }
-}
+// const createPGDatabase = async () => {
+//     let client;
+//     try {
+//         client = await setupPool.connect();
+//         const query = 'SELECT 1 FROM pg_database WHERE datname = $1';
+//         await client.query(query, [process.env.PG_DATABASE]);
+//         console.log('Database exists')
+//     } catch (error) {
+//         console.log('Database not found. Creating...')
+//         await client.query(`CREATE DATABASE ${process.env.PG_DATABASE}`);
+//     } finally {
+//         client.release();
+//         // await setupPool.end();
+//     }
+// }
 
 const createPGTables = async () => {
     const schemaPath = path.join(__dirname, "../db/schema.sql");
@@ -139,7 +139,7 @@ const pgQueries = {
 }
 
 module.exports = {
-    createPGDatabase,
+    // createPGDatabase,
     createPGTables,
     pgQueries
 };
