@@ -3,7 +3,7 @@ const { Pool } = require('pg');
 const fs = require("fs");
 const path = require("path");
 
-const pool = new Pool({
+const setupPool = new Pool({
     user: process.env.PG_USER,
     host: process.env.PG_HOST,
     database: 'postgres',
@@ -11,31 +11,45 @@ const pool = new Pool({
     port: process.env.PG_PORT,
 });
 
+const pool = new Pool({
+    user: process.env.PG_USER,
+    host: process.env.PG_HOST,
+    database: process.env.PG_DATABASE,
+    password: process.env.PG_PASSWORD,
+    port: process.env.PG_PORT,
+});
+
 const createPGDatabase = async () => {
-    const client = await pool.connect();
+    let client;
     try {
+        client = await setupPool.connect();
         const query = 'SELECT 1 FROM pg_database WHERE datname = $1';
-        const result = await client.query(query, [process.env.PG_DATABASE]);
+        await client.query(query, [process.env.PG_DATABASE]);
         console.log('Database exists')
     } catch (error) {
         console.log('Database not found. Creating...')
         await client.query(`CREATE DATABASE ${process.env.PG_DATABASE}`);
+    } finally {
+        client.release();
+        await setupPool.end();
     }
 }
 
 const createPGTables = async () => {
     const schemaPath = path.join(__dirname, "../db/schema.sql");
     const schemaSql = fs.readFileSync(schemaPath, "utf8");
+    let client;
 
     try {
-        const client = await pool.connect();
+        client = await pool.connect();
         console.log('PG pool connected!');
         await client.query(schemaSql);
-        client.release();
         console.log('PostgreSQL Bins and Requests tables created!');
       } catch (error) {
         console.error('Error creating PostgreSQL tables', error?.message);
         throw error;
+      } finally {
+        client.release();
       }
 };
 
