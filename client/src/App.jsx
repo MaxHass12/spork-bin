@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
-import HomePage from './components/HomePage';
+import MainNav from './components/MainNav';
+import MainCard from './components/MainCard';
+import SideList from './components/SideList';
 import { getAllBins, getNewRandomBinId } from './service/bins.service';
+
+export const DOMAIN_NAME = 'https://oursite.com';
 
 function App() {
   const [bins, setBins] = useState([]);
@@ -22,21 +26,25 @@ function App() {
   }, []);
 
   const handleGetNewBin = async () => {
-    try {
-      const newBinIdFromBackend = await getNewRandomBinId();
-      console.log('fetched newRandomBinId from the backend');
-      setNewRandomBinId(newBinIdFromBackend.new_bin_id);
-    } catch (err) {
-      console.log(err);
-      alert('Could not fetch new Random Bin Id');
-    }
+    setNewRandomBinId(String(Math.random()).slice(0, 7));
+    // try {
+    //   const newBinIdFromBackend = await getNewRandomBinId();
+    //   console.log('fetched newRandomBinId from the backend');
+    //   setNewRandomBinId(newBinIdFromBackend.new_bin_id);
+    // } catch (err) {
+    //   console.log(err);
+    //   alert('Could not fetch new Random Bin Id');
+    // }
   };
 
-  console.log(bins);
-  console.log(newRandomBinId);
   return (
     <>
-      <HomePage />
+      <MainNav handleGetNewBin={handleGetNewBin} />
+
+      <div className="container">
+        <MainCard newRandomBinID={newRandomBinId} />
+        <SideList />
+      </div>
     </>
   );
 }
