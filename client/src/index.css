@@ -85,6 +85,7 @@ ul {
 
 .main-card p {
   line-height: 1.6;
+  font-size: large;
   text-align: center;
 }
 
@@ -165,6 +166,44 @@ ul {
   background-color: #f5f5f5;
   border-radius: 5px;
 }
+
+/* Dialog styling */
+.modal {
+  border: none;
+  padding: 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 300px;
+  max-width: 90%;
+}
+
+/* Dialog backdrop */
+.modal::backdrop {
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent backdrop */
+}
+
+/* Modal content styling */
+.modal-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* Button styling */
+/* button {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+button:hover {
+  background-color: #0056b3;
+} */
 
 /* Responsive Design */
 @media (max-width: 768px) {

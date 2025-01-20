@@ -26,7 +26,8 @@ function App() {
   }, []);
 
   const handleGetNewBin = async () => {
-    setNewRandomBinId(String(Math.random()).slice(0, 7));
+    const randomNumber = Math.floor(Math.random() * 1000);
+    setNewRandomBinId('hjkl' + randomNumber);
     // try {
     //   const newBinIdFromBackend = await getNewRandomBinId();
     //   console.log('fetched newRandomBinId from the backend');
@@ -43,7 +44,7 @@ function App() {
 
       <div className="container">
         <MainCard newRandomBinID={newRandomBinId} />
-        <SideList />
+        <SideList bins={bins} />
       </div>
     </>
   );

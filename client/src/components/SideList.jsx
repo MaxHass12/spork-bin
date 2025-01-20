@@ -1,12 +1,12 @@
-function SideList() {
+function SideList({ bins }) {
+  console.log(bins);
   return (
     <div className="side-list">
-      <h2>Side List</h2>
+      <h2>My Bins</h2>
       <ul>
-        <li>List Item 1</li>
-        <li>List Item 2</li>
-        <li>List Item 3</li>
-        <li>List Item 4</li>
+        {bins.map((bin) => (
+          <li key={bin.id}>{bin.random_id}</li>
+        ))}
       </ul>
     </div>
   );
