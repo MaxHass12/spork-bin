@@ -22,6 +22,16 @@ ul {
   font-weight: bold;
 }
 
+.navbar a {
+  text-decoration: none;
+  color: #fff;
+  transition: color 0.3s;
+}
+
+.navbar a:hover {
+  color: #00ff00;
+}
+
 .nav-links {
   display: flex;
   list-style: none;
@@ -195,6 +205,16 @@ ul {
   padding: 0.5rem;
   background-color: #f5f5f5;
   border-radius: 5px;
+}
+
+.side-list a {
+  color: #333;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.side-list a:hover {
+  color: #808000;
 }
 
 .modal-overlay {

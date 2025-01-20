@@ -3,7 +3,7 @@ import BinCreationModal from './BinCreationModal';
 import { useState } from 'react';
 import { createNewBin } from '../service/bins.service';
 
-function MainCard({ newRandomBinID, setBins }) {
+function MainCard({ newRandomBinID, setBins, navigateToBin }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNewBinCreationSuccess, setIsNewBinCreationSuccess] = useState(null);
 
@@ -38,6 +38,7 @@ function MainCard({ newRandomBinID, setBins }) {
     event.stopPropagation();
 
     console.log('BASKET WILL BE OPENED', newRandomBinID);
+    navigateToBin(newRandomBinID);
   };
 
   const SuccessModalContent = () => {
