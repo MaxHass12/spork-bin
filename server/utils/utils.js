@@ -17,7 +17,7 @@ function getRandomChar() {
 function createNewBinID() {
   let binID = '';
 
-  for (let i = 0; i <= BIN_ID_LENGTH; i++) {
+  for (let i = 1; i <= BIN_ID_LENGTH; i++) {
     binID += getRandomChar();
   }
 

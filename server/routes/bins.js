@@ -1,5 +1,5 @@
 const binsRouter = require('express').Router();
-const { isValidBinID, binIDInUse } = require('./utils/utils');
+const { isValidBinID, binIDInUse } = require('../utils/utils');
 // require functions from './config/db' to connect to MongoDB and PostgreSQL
 
 // invoke functions from './config/db' to connect to MongoDB and PostgreSQL
@@ -8,9 +8,13 @@ const { isValidBinID, binIDInUse } = require('./utils/utils');
 binsRouter.post('/:id', async (req, res) => {
   const binID = req.params.id;
   const { method, headers, body } = req;
-  const date = req.date.match(/[A-Z]{1}[a-z]{2}, \d{1,2} [A-Z]{1}[a-z]{2} \d{4}/)[0];
-  const time = req.date.match(/\d{2}:\d{2}:\d{2} GMT/)[0];
+  const timestamp = String(new Date());
+  const date = timestamp.match(/[A-Z]{1}[a-z]{2} \d{2} \d{4}/)[0];
+  const time = timestamp.match(/\d{2}:\d{2}:\d{2}/)[0];
 
+  // console.log(binID, method, headers, body, date, time);
+  // res.status(200).send();
+  
   if (isValidBinID(binID) && binIDInUse(binID)) {
     // replace MongoRequest w/ actual MongoDB model export
     const newRequestBody = new MongoRequest({ body });

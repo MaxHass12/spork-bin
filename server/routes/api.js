@@ -3,7 +3,7 @@ const {
   createNewBinID, 
   binIDInUse, 
   isValidBinID
-} = require('./utils/utils');
+} = require('../utils/utils');
 // require functions from './config/db' to connect to MongoDB and PostgreSQL
 
 // invoke functions from './config/db' to connect to MongoDB and PostgreSQL
