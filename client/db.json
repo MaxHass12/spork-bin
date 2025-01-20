@@ -1,4 +1,5 @@
 {
+  "new_bin_id": { "new_bin_id": "mnop123" },
   "bins": [
     { "id": 1, "random_id": "abcd123" },
     { "id": 2, "random_id": "efgh456" },
