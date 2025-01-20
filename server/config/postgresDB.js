@@ -67,11 +67,11 @@ const pgQueries = {
         }
     },
 
-    async getAllBins(bin_id) {
-        const query = `SELECT * FROM bins`;
+    async getAllBins() {
+        const query = `SELECT random_id FROM bins`;
         try {
             const result = await pool.query(query);
-            console.log('bins retrieved: ', result.rows);
+            console.log('bins retrieved: ', result.rows.length, ' bins');
             return result.rows;
         } catch (error) {
             console.error('Error fetching bins: ', error?.message);
