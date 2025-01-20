@@ -54,10 +54,10 @@ const createPGTables = async () => {
 };
 
 const pgQueries = {
-    async getRequests(bin_id) {
+    async getAllRequests(bin_id) {
         const query = `SELECT * FROM requests AS r 
                        JOIN bins AS b ON b.id = r.bin_id 
-                       WHERE b.uuid = $1`;
+                       WHERE b.random_id = $1`;
         try {
             const result = await pool.query(query, [bin_id]);
             return result.rows;
@@ -67,8 +67,20 @@ const pgQueries = {
         }
     },
 
+    async getAllBins(bin_id) {
+        const query = `SELECT * FROM bins`;
+        try {
+            const result = await pool.query(query);
+            console.log('bins retrieved: ', result.rows);
+            return result.rows;
+        } catch (error) {
+            console.error('Error fetching bins: ', error?.message);
+            throw error;
+        }
+    },
+
     async getBin(bin_id) {
-        const query = `SELECT * FROM bins WHERE uuid = $1`;
+        const query = `SELECT * FROM bins WHERE random_id = $1`;
         try {
             const result = await pool.query(query, [bin_id]);
             console.log('bin retrieved: ', result.rows[0]);
@@ -80,7 +92,7 @@ const pgQueries = {
     },
 
     async addBin(bin_id) {
-        const query = `INSERT INTO bins (uuid) VALUES ($1) RETURNING *`;
+        const query = `INSERT INTO bins (random_id) VALUES ($1) RETURNING *`;
         try {
             const result = await pool.query(query, [bin_id]);
             console.log('bin created: ', result.rows[0]);
@@ -92,11 +104,11 @@ const pgQueries = {
     },
 
     async deleteBin(bin_id) {
-        const query = `DELETE FROM bins WHERE uuid = $1 RETURNING id`;
+        const query = `DELETE FROM bins WHERE random_id = $1 RETURNING id`;
         try {
             const result = await pool.query(query, [bin_id]);
             if (result.rowCount === 0) {
-                console.log('No bin found with uuid: ', bin_id);
+                console.log('No bin found with random_id: ', bin_id);
                 return false;
             }
             console.log('bin deleted: ', result.rows[0]);
@@ -110,12 +122,12 @@ const pgQueries = {
     async addRequest(bin_id, method, headers, date, time) {
         const query = `INSERT INTO requests (bin_id, method, headers, date, time) 
                        SELECT id, $2, $3, $4, $5
-                       FROM bins WHERE uuid = $1
+                       FROM bins WHERE random_id = $1
                        RETURNING *`;
         try {
             const result = await pool.query(query, [bin_id, method, headers, date, time]);
             if (result.rowCount === 0) {
-                throw new Error('Bin does not exist with uuid: ', bin_id)
+                throw new Error('Bin does not exist with random_id: ', bin_id)
             }
             console.log('request created: ', result.rows[0]);
             return result.rows[0];
