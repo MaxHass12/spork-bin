@@ -1,15 +1,11 @@
 const apiRouter = require('express').Router();
 const { connectMongoDB } = require('../config/mongoDB');
 const { createPGTables, pgQueries } = require('../config/postgresDB');
-const { 
-  createNewBinID, 
-  binIDInUse, 
-  isValidBinID
-} = require('../utils/utils');
+const { createNewBinID, binIDInUse, isValidBinID } = require('../utils/utils');
 const { MongoRequest } = require('../models/mongoRequest');
 
 connectMongoDB();
-createPGTables();
+// createPGTables();
 
 // GET /api/new_bin_id (to get a new random_id)
 apiRouter.get('/new_bin_id', async (req, res) => {
@@ -19,7 +15,7 @@ apiRouter.get('/new_bin_id', async (req, res) => {
   while (binIDInUse(newBinID, allBins)) {
     newBinID = createNewBinID();
   }
-  
+
   res.send(newBinID);
 });
 
@@ -33,15 +29,19 @@ apiRouter.get('/bins', async (req, res) => {
 });
 
 apiRouter.post('/bins', async (req, res) => {
-  let { newBinID } = req.body;
+  console.log('POST /api/bins', req.body); // Inserted for debugging
+  let newBinID = req.body.newBinId;
   let allBins = await pgQueries.getAllBins();
   if (isValidBinID(newBinID) && !binIDInUse(newBinID, allBins)) {
     const newBin = await pgQueries.addBin(newBinID);
     res.status(201).json(newBin);
   } else {
-    res.status(400).send("Invalid bin name. Bin names should only include " +
-      "digits 0-9 and lowercase letters."
-    )
+    res
+      .status(400)
+      .send(
+        'Invalid bin name. Bin names should only include ' +
+          'digits 0-9 and lowercase letters.'
+      );
   }
 });
 
@@ -51,7 +51,7 @@ apiRouter.get('/bins/:id', async (req, res) => {
   if (bin) {
     const requests = await pgQueries.getAllRequests(binID);
     const requestBodies = await MongoRequest.find({ bin_id: binID });
-    // function to stitch all data together for all requests in the bin 
+    // function to stitch all data together for all requests in the bin
     res.json(binData);
   } else {
     res.status(404).send(`Bin "${binID}" could not be found.`);
@@ -73,7 +73,7 @@ apiRouter.delete('/bins/:id', async (req, res) => {
 
 // // This API endpoint probably not needed - keeping for reference for now
 // // GET /api/bins/:id/requests/:request_id
-// // is it OK to use the request ID from the DB in the URL here? 
+// // is it OK to use the request ID from the DB in the URL here?
 // apiRouter.get('/bins/:id/requests/:request_id', async (req, res) => {
 //   const requestID = req.params.request_id;
 //   // replace pgQueries method with PG method from './config/db'

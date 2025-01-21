@@ -1,11 +1,11 @@
-import { DOMAIN_NAME } from '../App';
 import BinCreationModal from './BinCreationModal';
 import { useState } from 'react';
 import { createNewBin } from '../service/bins.service';
 
-function MainCard({ newRandomBinID, setBins, navigateToBin }) {
+function MainCard({ newRandomBinID, setBins, navigateToBin, navigateToHome }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNewBinCreationSuccess, setIsNewBinCreationSuccess] = useState(null);
+  const DOMAIN_NAME = `${window.location.protocol}//${window.location.host}`;
 
   const openModal = () => setIsModalOpen(true);
 
@@ -15,6 +15,7 @@ function MainCard({ newRandomBinID, setBins, navigateToBin }) {
 
     setIsModalOpen(false);
     setIsNewBinCreationSuccess(null);
+    navigateToHome();
   };
 
   const handleFormSubmit = async (event) => {

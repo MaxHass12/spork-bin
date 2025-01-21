@@ -11,7 +11,7 @@ function SideList({ bins, navigateToBin }) {
       <h2>My Bins</h2>
       <ul>
         {bins.map((bin) => (
-          <li key={bin.id}>
+          <li key={bin.random_id}>
             <a
               href="#"
               onClick={(event) =>
