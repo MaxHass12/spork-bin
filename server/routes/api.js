@@ -73,7 +73,7 @@ apiRouter.get('/bins/:random_id', async (req, res) => {
 });
 
 apiRouter.delete('/bins/:random_id', async (req, res) => {
-  const binRandomID = req.params.id;
+  const binRandomID = req.params.random_id;
   let allBins = await pgQueries.getAllBins();
 
   if (isValidBinID(binRandomID) && binIDInUse(binRandomID, allBins)) {
