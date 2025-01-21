@@ -3,13 +3,13 @@ const { Pool } = require('pg');
 const fs = require('fs');
 const path = require('path');
 
-const setupPool = new Pool({
-  user: process.env.PG_USER,
-  host: process.env.PG_HOST,
-  database: 'postgres',
-  password: process.env.PG_PASSWORD,
-  port: process.env.PG_PORT,
-});
+// const setupPool = new Pool({
+//   user: process.env.PG_USER,
+//   host: process.env.PG_HOST,
+//   database: 'postgres',
+//   password: process.env.PG_PASSWORD,
+//   port: process.env.PG_PORT,
+// });
 
 const pool = new Pool({
   user: process.env.PG_USER,
