@@ -7,8 +7,8 @@ connectMongoDB();
 // createPGDatabase();
 createPGTables();
 
-binsRouter.post('/:id', async (req, res) => {
-  const binID = req.params.id;
+binsRouter.post('/:random_id', async (req, res) => {
+  const binRandomID = req.params.random_id;
   const { method, headers, body } = req;
   const timestamp = String(new Date());
   const date = timestamp.match(/[A-Z]{1}[a-z]{2} \d{2} \d{4}/)[0];
@@ -17,13 +17,14 @@ binsRouter.post('/:id', async (req, res) => {
   let allBins = await pgQueries.getAllBins();
 
   // code for testing route
-  console.log(binID, method, headers, body, date, time);
-  res.status(200).send();
+  // console.log(binID, method, headers, body, date, time);
+  // res.status(200).send();
   
-  if (isValidBinID(binID) && binIDInUse(binID, allBins)) {
-    const newBinRequest = await pgQueries.addRequest(binID, method, headers, date, time);
+  if (isValidBinID(binRandomID) && binIDInUse(binRandomID, allBins)) {
+    const newBinRequest = await pgQueries.addRequest(binRandomID, method, headers, date, time);
+    const bin_id = newBinRequest.bin_id;
     const request_id = newBinRequest.id;
-    const newRequestBody = new MongoRequest({ request_id, payload: body });
+    const newRequestBody = new MongoRequest({ request_id, bin_id, payload: body });
     await newRequestBody.save();
     const requestInfo = {
       method: newBinRequest.method,
