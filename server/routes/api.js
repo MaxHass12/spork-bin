@@ -2,16 +2,27 @@ const apiRouter = require('express').Router();
 const { connectMongoDB } = require('../config/mongoDB');
 const { createPGTables, pgQueries } = require('../config/postgresDB');
 const { createNewBinID, binIDInUse, isValidBinID } = require('../utils/utils');
-const { MongoRequest } = require('../models/mongoRequest');
+const MongoRequest = require('../models/mongoRequest');
+const { request } = require('express');
 
 connectMongoDB();
 // createPGTables();
 
 function matchRequestBodies(requests, requestBodies) {
-  requests.forEach(request => {
-    const body = requestBodies.filter(requestBody => 
-      request.id === requestBody.request_id);
-    request.body = body;
+  // for (let i = 0; i < requests.length; i++) {
+  //   console.log('request ID: ', requests[i].id);
+    
+  //   const mongoBody = await MongoRequest.find({ request_id: requests[i].id });
+  //   console.log('mongo body: ', mongoBody);
+  // }
+  
+  requests.forEach((request) => {
+    const mongoBody = requestBodies.filter(reqBody => 
+      reqBody['request_id'] === request.id
+    )[0];
+    // console.log('body: ', body);
+    
+    request.body = mongoBody['payload'];
   });
 }
 
@@ -59,12 +70,15 @@ apiRouter.get('/bins/:random_id', async (req, res) => {
   
   if (isValidBinID(binRandomID) && binIDInUse(binRandomID, allBins)) {
     const requests = await pgQueries.getAllRequests(binRandomID);
-    const binPostgresID = await pgQueries.getBin(binRandomID).id;
+    // console.log('requests: ', requests);
+    const pgBin = await pgQueries.getBin(binRandomID);
+    const binPostgresID = pgBin.id;
     const requestBodies = await MongoRequest.find({ bin_id: binPostgresID });
-    const requestsData = matchRequestBodies(requests, requestBodies);
+    // console.log('request bodies: ', requestBodies);
+    matchRequestBodies(requests, requestBodies);
     const binData = {
       random_id: binRandomID,
-      requests: requestsData,
+      requests,
     };
     res.json(binData);
   } else {
@@ -77,7 +91,8 @@ apiRouter.delete('/bins/:random_id', async (req, res) => {
   let allBins = await pgQueries.getAllBins();
 
   if (isValidBinID(binRandomID) && binIDInUse(binRandomID, allBins)) {
-    const binPostgresID = await pgQueries.getBin(binRandomID).id;
+    const pgBin = await pgQueries.getBin(binRandomID);
+    const binPostgresID = pgBin.id;
     await pgQueries.deleteBin(binRandomID);
     await MongoRequest.deleteMany({ bin_id: binPostgresID });
     res.sendStatus(204);

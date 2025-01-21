@@ -2,6 +2,7 @@ const binsRouter = require('express').Router();
 const { connectMongoDB } = require('../config/mongoDB');
 const { createPGTables, pgQueries } = require('../config/postgresDB');
 const { isValidBinID, binIDInUse } = require('../utils/utils');
+const MongoRequest = require('../models/mongoRequest');
 
 connectMongoDB();
 // createPGDatabase();
@@ -24,8 +25,14 @@ binsRouter.post('/:random_id', async (req, res) => {
     const newBinRequest = await pgQueries.addRequest(binRandomID, method, headers, date, time);
     const bin_id = newBinRequest.bin_id;
     const request_id = newBinRequest.id;
-    const newRequestBody = new MongoRequest({ request_id, bin_id, payload: body });
+    const newRequestBody = new MongoRequest({
+      request_id, 
+      bin_id,
+      payload: body, 
+    });
     await newRequestBody.save();
+    console.log('body: ', newRequestBody['payload']);
+    
     const requestInfo = {
       method: newBinRequest.method,
       date: newBinRequest.date,
