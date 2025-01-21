@@ -5,7 +5,13 @@ function BinDetails({ bins }) {
 
   useEffect(() => {
     const path = window.location.pathname.split('/');
-    const randomId = path[path.length - 1];
+
+    // If path ends is '/' then ignore it
+    const randomId =
+      path[path.length - 1] === ''
+        ? path[path.length - 2]
+        : path[path.length - 1];
+
     const bin = bins.find(
       (bin) => bin.random_id === randomId || bin.newBinId === randomId
     );
