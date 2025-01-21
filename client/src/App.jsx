@@ -12,8 +12,8 @@ function App() {
   const [bins, setBins] = useState([]);
   const [newRandomBinId, setNewRandomBinId] = useState(null);
 
-  // Fetching list of bins and newRandomBinId on loading the app
   useEffect(() => {
+    // Fetching list of bins and newRandomBinId on loading the app
     // adding event-listener on popstate to change UI on popstate event
     const onPopState = () => setCurrentPath(window.location.pathname);
     window.addEventListener('popstate', onPopState);
@@ -32,22 +32,14 @@ function App() {
   }, []);
 
   const handleGetNewBin = async () => {
-    const randomNumber = Math.floor(Math.random() * 1000);
-    setNewRandomBinId('hjkl' + randomNumber);
-    // try {
-    //   const newBinIdFromBackend = await getNewRandomBinId();
-    //   console.log('fetched newRandomBinId from the backend');
-    //   setNewRandomBinId(newBinIdFromBackend.new_bin_id);
-    // } catch (err) {
-    //   console.log(err);
-    //   alert('Could not fetch new Random Bin Id');
-    // }
+    try {
+      const newBinIdFromBackend = await getNewRandomBinId();
+      setNewRandomBinId(newBinIdFromBackend);
+    } catch (err) {
+      console.log(err);
+      alert('Could not fetch new Random Bin Id');
+    }
   };
-
-  // const navigateTo = (path) => {
-  //   window.history.pushState({}, '', path);
-  //   setCurrentPath(path);
-  // };
 
   const navigateToBin = (randomBinId) => {
     const path = '/view/' + randomBinId;
@@ -56,6 +48,7 @@ function App() {
   };
 
   const navigateToHome = () => {
+    handleGetNewBin();
     const path = '/';
     window.history.pushState({}, '', path);
     setCurrentPath(path);
@@ -73,6 +66,7 @@ function App() {
             newRandomBinID={newRandomBinId}
             setBins={setBins}
             navigateToBin={navigateToBin}
+            navigateToHome={navigateToHome}
           />
           <SideList bins={bins} navigateToBin={navigateToBin} />
         </div>

@@ -1,0 +1,11 @@
+services:
+  postgres:
+    image: postgres
+    container_name: pg_container_sporkbin
+    restart: always
+    environment:
+      POSTGRES_USER: your_username
+      POSTGRES_PASSWORD: your_password
+      POSTGRES_DB: requestbin
+    ports:
+      - '5432:5432'
