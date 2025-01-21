@@ -2,9 +2,9 @@ const binsRouter = require('express').Router();
 const { connectMongoDB } = require('../config/mongoDB');
 const { createPGTables, pgQueries } = require('../config/postgresDB');
 const { isValidBinID, binIDInUse } = require('../utils/utils');
+const MongoRequest = require('../models/mongoRequest');
 
 connectMongoDB();
-// createPGDatabase();
 createPGTables();
 
 binsRouter.post('/:random_id', async (req, res) => {
@@ -17,11 +17,12 @@ binsRouter.post('/:random_id', async (req, res) => {
   let allBins = await pgQueries.getAllBins();
 
   // code for testing route
-  // console.log(binID, method, headers, body, date, time);
+  // console.log(binRandomID, method, headers, body, date, time);
   // res.status(200).send();
   
   if (isValidBinID(binRandomID) && binIDInUse(binRandomID, allBins)) {
     const newBinRequest = await pgQueries.addRequest(binRandomID, method, headers, date, time);
+    console.log(newBinRequest);
     const bin_id = newBinRequest.bin_id;
     const request_id = newBinRequest.id;
     const newRequestBody = new MongoRequest({ request_id, bin_id, payload: body });
@@ -35,7 +36,7 @@ binsRouter.post('/:random_id', async (req, res) => {
     }
     res.status(201).json(requestInfo);
   } else {
-    res.status(400).send(`Couldn't complete request. Invalid bin ID (${binID}) in URL`);
+    res.status(400).send(`Couldn't complete request. Invalid bin ID (${binRandomID}) in URL`);
   }
 });
 

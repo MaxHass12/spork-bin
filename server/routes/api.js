@@ -1,8 +1,8 @@
 const apiRouter = require('express').Router();
 const { connectMongoDB } = require('../config/mongoDB');
-const { createPGTables, pgQueries } = require('../config/postgresDB');
+const { pgQueries } = require('../config/postgresDB');
 const { createNewBinID, binIDInUse, isValidBinID } = require('../utils/utils');
-const { MongoRequest } = require('../models/mongoRequest');
+const MongoRequest = require('../models/mongoRequest');
 
 connectMongoDB();
 // createPGTables();
@@ -56,15 +56,15 @@ apiRouter.post('/bins', async (req, res) => {
 apiRouter.get('/bins/:random_id', async (req, res) => {
   const binRandomID = req.params.random_id;
   let allBins = await pgQueries.getAllBins();
-  
+
   if (isValidBinID(binRandomID) && binIDInUse(binRandomID, allBins)) {
     const requests = await pgQueries.getAllRequests(binRandomID);
     const binPostgresID = await pgQueries.getBin(binRandomID).id;
     const requestBodies = await MongoRequest.find({ bin_id: binPostgresID });
-    const requestsData = matchRequestBodies(requests, requestBodies);
+    matchRequestBodies(requests, requestBodies);
     const binData = {
       random_id: binRandomID,
-      requests: requestsData,
+      requests,
     };
     res.json(binData);
   } else {
