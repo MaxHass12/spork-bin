@@ -5,8 +5,6 @@ import SideList from './components/SideList';
 import { getAllBins, getNewRandomBinId } from './service/bins.service';
 import BinDetails from './components/BinDetails';
 
-export const DOMAIN_NAME = 'https://oursite.com';
-
 function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
   const [bins, setBins] = useState([]);
