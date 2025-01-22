@@ -69,7 +69,6 @@ apiRouter.get('/bins/:random_id', async (req, res) => {
       random_id: binRandomID,
       requests,
     };
-    console.log(binData);
     res.json(binData);
   } else {
     res.status(404).send(`Bin "${binRandomID}" could not be found.`);
