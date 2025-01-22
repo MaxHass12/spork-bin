@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS requests (
     "bin_id" INTEGER NOT NULL,
     "method" VARCHAR(6),
     "headers" JSONB,
+    "path" VARCHAR(50),
     "date" DATE NOT NULL,
     "time" TIME NOT NULL,
     FOREIGN KEY ("bin_id") REFERENCES bins("id") ON DELETE CASCADE
