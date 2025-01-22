@@ -22,11 +22,15 @@ binsRouter.post('/:random_id', async (req, res) => {
   
   if (isValidBinID(binRandomID) && binIDInUse(binRandomID, allBins)) {
     const newBinRequest = await pgQueries.addRequest(binRandomID, method, headers, date, time);
-    console.log(newBinRequest);
     const bin_id = newBinRequest.bin_id;
     const request_id = newBinRequest.id;
-    const newRequestBody = new MongoRequest({ request_id, bin_id, payload: body });
+    const newRequestBody = new MongoRequest({ 
+      request_id, 
+      bin_id, 
+      payload: body 
+    });
     await newRequestBody.save();
+    
     const requestInfo = {
       method: newBinRequest.method,
       date: newBinRequest.date,
