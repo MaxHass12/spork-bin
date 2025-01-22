@@ -4,6 +4,7 @@ import MainCard from './components/MainCard';
 import SideList from './components/SideList';
 import { getAllBins, getNewRandomBinId } from './service/bins.service';
 import BinDetailsTmp from './components/BinDetailsTmp';
+import BinDetails from './components/BinDetails';
 
 function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
@@ -69,7 +70,7 @@ function App() {
           <SideList bins={bins} navigateToBin={navigateToBin} />
         </div>
       ) : (
-        <BinDetailsTmp bins={bins} />
+        <BinDetails bins={bins} />
       )}
     </>
   );
