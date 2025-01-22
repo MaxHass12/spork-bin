@@ -76,7 +76,6 @@ apiRouter.get('/bins/:random_id', async (req, res) => {
       const binPostgresID = pgBin.id;
       const requestBodies = await MongoRequest.find({ bin_id: binPostgresID });
       matchRequestBodies(requests, requestBodies);
-      // console.log('requests: ', requests);
       
       const binData = {
         random_id: binRandomID,
