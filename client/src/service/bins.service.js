@@ -15,3 +15,8 @@ export const createNewBin = async (newBinId) => {
   const response = await axios.post('/api/bins', { newBinId });
   return response.data;
 };
+
+export const getBinDetails = async (randomId) => {
+  const response = await axios.get('/api/bins/' + randomId);
+  return response.data;
+};

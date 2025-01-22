@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { getBinDetails } from '../service/bins.service';
+import { JsonView } from 'react-json-view-lite';
 
 function BinDetails({ bins }) {
   const [bin, setBin] = useState(null);
@@ -12,16 +14,23 @@ function BinDetails({ bins }) {
         ? path[path.length - 2]
         : path[path.length - 1];
 
-    const bin = bins.find(
+    const binId = bins.find(
       (bin) => bin.random_id === randomId || bin.newBinId === randomId
     );
-    setBin(bin);
+
+    if (!binId) {
+      return;
+    }
+
+    getBinDetails(binId.random_id).then((bin) => {
+      setBin(bin);
+    });
   }, [bins]);
 
   return (
     <div>
       <h1>Bin Details Should Be Displayed</h1>
-      <pre>{JSON.stringify(bin, null, 2)}</pre>
+      <JsonView data={bin} />
     </div>
   );
 }
