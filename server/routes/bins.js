@@ -23,22 +23,28 @@ function extractRequestData(req) {
     date,
     time,
     body,
-  }
+  };
 }
 
 function formatRequestData(pgBinRequest, mongoRequestBody) {
+  let body = mongoRequestBody['payload'];
+  console.log('body from format: ', body);
+  
+  if (!body || Object.keys(body).length === 0) {
+    body = null;
+  } 
+  
   return {
     method: pgBinRequest.method,
     headers: pgBinRequest.headers,
     path: pgBinRequest.path,
     date: pgBinRequest.date,
     time: pgBinRequest.time,
-    body: mongoRequestBody['payload'],
+    body: body,
   };
 }
 
 binsRouter.all('/:random_id([a-z0-9]{7})', async (req, res) => {
-  console.log('route working');
   try {
     const { binRandomID, method, headers, path, date, time, body } = extractRequestData(req);
     const allBins = await pgQueries.getAllBins();
@@ -56,7 +62,7 @@ binsRouter.all('/:random_id([a-z0-9]{7})', async (req, res) => {
       await newRequestBody.save();
       
       const requestInfo = formatRequestData(newBinRequest, newRequestBody);
-      res.status(201).json(requestInfo);
+      res.status(200).json(requestInfo);
     } else {
       res.status(400).send(`Couldn't complete request. Invalid bin ID ` +
         `(${binRandomID}) in URL`);

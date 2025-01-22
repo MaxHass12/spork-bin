@@ -9,11 +9,13 @@ connectMongoDB();
 
 function matchRequestBodies(requests, requestBodies) {
   requests.forEach(request => {
-    const mongoBody = requestBodies.filter(reqBody =>
-      reqBody['request_id'] === request.id
-    )[0];
+    const mongoBody = requestBodies.filter(reqBody => {
+      return reqBody['request_id'] === request.id;
+    })[0];
 
-    request.body = mongoBody['payload'];
+    console.log('mongoBody: ', mongoBody);
+    
+    request.body = mongoBody['payload'] || null;
   });
 }
 
@@ -54,8 +56,8 @@ apiRouter.post('/bins', async (req, res) => {
       res
         .status(400)
         .send(
-          'Invalid bin name. Bin names should only include digits 0-9 and ' +
-          'lowercase letters.'
+          'Invalid bin name. Bin names should be 7 characters long and only ' +
+          'include digits 0-9 and lowercase letters.'
         );
     }
   } catch {
@@ -74,6 +76,8 @@ apiRouter.get('/bins/:random_id', async (req, res) => {
       const binPostgresID = pgBin.id;
       const requestBodies = await MongoRequest.find({ bin_id: binPostgresID });
       matchRequestBodies(requests, requestBodies);
+      // console.log('requests: ', requests);
+      
       const binData = {
         random_id: binRandomID,
         requests,
