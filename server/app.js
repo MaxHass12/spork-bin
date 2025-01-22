@@ -9,8 +9,8 @@ app.use('/view/*', express.static('dist'));
 
 app.use(express.json());
 
+app.use('/', binsRouter);
 app.use('/api', apiRouter);
-app.use('/bins', binsRouter);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

@@ -7,7 +7,7 @@ const MongoRequest = require('../models/mongoRequest');
 connectMongoDB();
 createPGTables();
 
-binsRouter.post('/:random_id', async (req, res) => {
+binsRouter.post('/:random_id([a-z0-9]{7})', async (req, res) => {
   const binRandomID = req.params.random_id;
   const { method, headers, body } = req;
   const timestamp = String(new Date());

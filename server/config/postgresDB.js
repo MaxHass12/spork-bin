@@ -31,7 +31,7 @@ const createPGTables = async () => {
 
 const pgQueries = {
     async getAllRequests(random_id) {
-        const query = `SELECT r.id, r.bin_id, r.method, r.headers, r.date, r.time
+        const query = `SELECT r.id, r.method, r.headers, r.date, r.time
                       FROM requests AS r
                       JOIN bins AS b ON b.id = r.bin_id 
                       WHERE b.random_id = $1`;
@@ -48,7 +48,7 @@ const pgQueries = {
     },
 
     async getAllBins() {
-        const query = `SELECT id, random_id FROM bins`;
+        const query = `SELECT random_id FROM bins`;
         try {
             const result = await pool.query(query);
             console.log('bins retrieved: ', result.rows.length, ' bins');
