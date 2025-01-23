@@ -421,7 +421,7 @@ button:hover {
 }
 
 .delete-icon {
-  color: #880808;
+  color: #e97451;
   font-size: 30px;
   transition: color 0.3s;
 }
@@ -452,7 +452,7 @@ button:hover {
   }
   50% {
     transform: scale(1.2);
-    color: #e97451;
+    color: #880808;
   }
   100% {
     transform: scale(1);

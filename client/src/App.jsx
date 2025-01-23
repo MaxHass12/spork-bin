@@ -17,18 +17,20 @@ function App() {
     const onPopState = () => setCurrentPath(window.location.pathname);
     window.addEventListener('popstate', onPopState);
 
-    async function fetchBins() {
-      try {
-        const bins = await getAllBins();
-        setBins(bins);
-      } catch (err) {
-        console.log(err);
-        alert('Could not fetch bins');
-      }
-    }
     fetchBins();
     handleGetNewBin();
   }, []);
+
+  function fetchBins() {
+    getAllBins()
+      .then((bins) => {
+        setBins(bins);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert('Could not load bins');
+      });
+  }
 
   const handleGetNewBin = async () => {
     try {
@@ -48,6 +50,7 @@ function App() {
 
   const navigateToHome = () => {
     handleGetNewBin();
+    fetchBins();
     const path = '/';
     window.history.pushState({}, '', path);
     setCurrentPath(path);
@@ -70,7 +73,7 @@ function App() {
           <SideList bins={bins} navigateToBin={navigateToBin} />
         </div>
       ) : (
-        <BinDetails bins={bins} />
+        <BinDetails bins={bins} navigateToHome={navigateToHome} />
       )}
     </>
   );

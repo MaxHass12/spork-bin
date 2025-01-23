@@ -20,3 +20,8 @@ export const getBinDetails = async (randomId) => {
   const response = await axios.get('/api/bins/' + randomId);
   return response.data;
 };
+
+export const deleteBin = async (randomId) => {
+  const response = await axios.delete('/api/bins/' + randomId);
+  return response.data;
+};

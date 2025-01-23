@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { getBinDetails } from '../service/bins.service';
+import { getBinDetails, deleteBin } from '../service/bins.service';
 import BinDetailsWithRequests from './BinDetailsWithRequests.jsx';
 import EmptyBin from './EmptyBin.jsx';
 import DeleteIcon from './DeleteIcon.jsx';
 
-function BinDetails({ bins }) {
+function BinDetails({ bins, navigateToHome }) {
   const [bin, setBin] = useState(null);
 
   useEffect(() => {
@@ -39,9 +39,20 @@ function BinDetails({ bins }) {
     };
   }, [bins]);
 
+  const handleDeleteBin = () => {
+    deleteBin(bin.random_id)
+      .then((_res) => {
+        navigateToHome();
+      })
+      .catch((err) => {
+        console.log(err);
+        alert('Could not delete Bin');
+      });
+  };
+
   return (
     <div>
-      {bin && <DeleteIcon />}
+      {bin && <DeleteIcon onDelete={handleDeleteBin} />}
       {bin &&
         (bin.requests.length === 0 ? (
           <EmptyBin random_id={bin.random_id} />

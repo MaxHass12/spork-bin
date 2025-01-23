@@ -44,7 +44,6 @@ const RequestDetails = ({ requestData }) => {
     setIsBodyVisible(!isBodyVisible);
   };
 
-  console.log(requestData);
   return (
     <div className="card">
       <div className="card-header">
