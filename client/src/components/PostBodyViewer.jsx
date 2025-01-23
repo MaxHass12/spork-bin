@@ -6,13 +6,14 @@ const PostBodyViewer = ({ data, contentType }) => {
   const toggleView = () => setIsFormatted(!isFormatted);
 
   const formatData = (data, contentType) => {
-    if (contentType === 'applicatioin/json') {
+    if (contentType === 'application/json') {
       return JSON.stringify(data, null, 2); // Pretty-print JSON
     } else {
-      return data; // Return raw string or other formats
+      return JSON.stringify(data); // Return raw string or other formats
     }
   };
 
+  // console.log(data, contentType);
   return (
     <div
       style={{
@@ -33,7 +34,7 @@ const PostBodyViewer = ({ data, contentType }) => {
       >
         {isFormatted ? 'Show Raw' : 'Show Formatted'}
       </button>
-
+      {/* {JSON.stringify(data, null, 2)} */}
       <pre>
         {isFormatted ? formatData(data, contentType) : JSON.stringify(data)}
       </pre>

@@ -38,7 +38,6 @@ function MainCard({ newRandomBinID, setBins, navigateToBin, navigateToHome }) {
     event.preventDefault();
     event.stopPropagation();
 
-    console.log('BASKET WILL BE OPENED', newRandomBinID);
     navigateToBin(newRandomBinID);
   };
 

@@ -61,7 +61,7 @@ const RequestDetails = ({ requestData }) => {
             <div className="content">
               <PostBodyViewer
                 data={requestData.body}
-                contentType={requestData['content-type']}
+                contentType={requestData.headers['content-type']}
               />
             </div>
           )}
