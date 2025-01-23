@@ -8,6 +8,8 @@ app.use(express.static('dist'));
 app.use('/view/*', express.static('dist'));
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.text());
 
 app.use('/', binsRouter);
 app.use('/api', apiRouter);

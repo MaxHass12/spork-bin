@@ -7,41 +7,71 @@ const MongoRequest = require('../models/mongoRequest');
 connectMongoDB();
 createPGTables();
 
-binsRouter.post('/:random_id([a-z0-9]{7})', async (req, res) => {
+function extractRequestData(req) {
   const binRandomID = req.params.random_id;
-  const { method, headers, body } = req;
+  const { method, headers, originalUrl, body } = req;
+
+  console.log('body from req.body: ', body);
+  
+
   const timestamp = String(new Date());
   const date = timestamp.match(/[A-Z]{1}[a-z]{2} \d{2} \d{4}/)[0];
   const time = timestamp.match(/\d{2}:\d{2}:\d{2}/)[0];
 
-  let allBins = await pgQueries.getAllBins();
+  return {
+    binRandomID,
+    method,
+    headers,
+    path: originalUrl,
+    date,
+    time,
+    body,
+  };
+}
 
-  // code for testing route
-  // console.log(binRandomID, method, headers, body, date, time);
-  // res.status(200).send();
+function formatRequestData(pgBinRequest, mongoRequestBody) {
+  let body = mongoRequestBody['payload'];
   
-  if (isValidBinID(binRandomID) && binIDInUse(binRandomID, allBins)) {
-    const newBinRequest = await pgQueries.addRequest(binRandomID, method, headers, date, time);
-    const bin_id = newBinRequest.bin_id;
-    const request_id = newBinRequest.id;
-    const newRequestBody = new MongoRequest({ 
-      request_id, 
-      bin_id, 
-      payload: body 
-    });
-    await newRequestBody.save();
+  if (!body || Object.keys(body).length === 0) {
+    body = null;
+  } 
+  
+  return {
+    method: pgBinRequest.method,
+    headers: pgBinRequest.headers,
+    path: pgBinRequest.path,
+    date: pgBinRequest.date,
+    time: pgBinRequest.time,
+    body: body,
+  };
+}
+
+binsRouter.all('/:random_id([a-z0-9]{7})', async (req, res) => {
+  try {
+    const { binRandomID, method, headers, path, date, time, body } = extractRequestData(req);
+    const allBins = await pgQueries.getAllBins();
     
-    const requestInfo = {
-      method: newBinRequest.method,
-      date: newBinRequest.date,
-      time: newBinRequest.time,
-      headers: newBinRequest.headers,
-      body: newRequestBody['payload'],
+    if (isValidBinID(binRandomID) && binIDInUse(binRandomID, allBins)) {
+      const newBinRequest = await pgQueries.addRequest(
+        binRandomID, method, headers, path, date, time
+      );
+
+      const newRequestBody = new MongoRequest({ 
+        request_id: newBinRequest.id, 
+        bin_id: newBinRequest.bin_id, 
+        payload: body, 
+      });
+      await newRequestBody.save();
+      
+      const requestInfo = formatRequestData(newBinRequest, newRequestBody);
+      res.status(200).json(requestInfo);
+    } else {
+      res.status(400).send(`Couldn't complete request. Invalid bin ID ` +
+        `(${binRandomID}) in URL`);
     }
-    res.status(201).json(requestInfo);
-  } else {
-    res.status(400).send(`Couldn't complete request. Invalid bin ID (${binRandomID}) in URL`);
-  }
+  } catch {
+    res.status(500).send('Server error');
+  } 
 });
 
 module.exports = binsRouter;
