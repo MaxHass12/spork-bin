@@ -382,3 +382,45 @@ button:hover {
 .centered-bin-details {
   text-align: center;
 }
+
+.centered-bin-details p {
+  font-size: large;
+  font-size: larger;
+}
+
+#copyIcon {
+  margin-left: 10px;
+}
+
+/* Icon Styling */
+.copy-icon {
+  margin-left: 10px;
+  cursor: pointer;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Icon Hover Effect */
+.copy-icon:hover {
+  color: #45a049;
+}
+
+/* Animation after copy action */
+.copy-icon.copied {
+  animation: clickAnimation 1s ease forwards;
+}
+
+/* Click Animation */
+@keyframes clickAnimation {
+  0% {
+    transform: scale(1);
+    color: #4caf50;
+  }
+  50% {
+    transform: scale(1.2);
+    color: #66bb6a; /* Lighter green during animation */
+  }
+  100% {
+    transform: scale(1);
+    color: #4caf50;
+  }
+}

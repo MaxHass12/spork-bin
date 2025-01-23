@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import RequestDetails from './RequestDetails.jsx';
 import { getBinDetails } from '../service/bins.service';
 import BinDetailsWithRequests from './BinDetailsWithRequests.jsx';
+import EmptyBin from './EmptyBin.jsx';
 
 function BinDetails({ bins }) {
   const [bin, setBin] = useState(null);
@@ -25,25 +25,24 @@ function BinDetails({ bins }) {
 
     getBinDetails(binId.random_id).then((bin) => {
       setBin(bin);
-      console.log(bin);
     });
-  }, [bins]);
 
-  const copyToClipboard = () => {
-    console.log('link copied');
-    navigator.clipboard.writeText(
-      `https://localhost:5173/${binTest.random_id}`
-    );
-  };
+    setInterval(() => {
+      getBinDetails(binId.random_id).then((bin) => {
+        setBin(bin);
+      });
+    }, 1500);
+  }, [bins]);
 
   return (
     <div>
       {bin &&
         (bin.requests.length === 0 ? (
-          <h1>Empty Bin</h1>
+          <EmptyBin random_id={bin.random_id} />
         ) : (
           <BinDetailsWithRequests bin={bin} />
         ))}
+      {!bin && <h1>Loading...</h1>}
     </div>
   );
 }

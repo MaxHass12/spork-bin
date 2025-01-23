@@ -1,3 +1,4 @@
+import CopyRequestUrl from './CopyRequestUrl';
 import RequestDetails from './RequestDetails';
 
 function BinDetailsWithRequests({ bin }) {
@@ -6,7 +7,10 @@ function BinDetailsWithRequests({ bin }) {
       <div className="card-container">
         <div className="centered-bin-details">
           <h1>SporkBin : {bin.random_id}</h1>
-          <h2>Requests are collected at </h2>
+          <p>
+            Requests are collected at{' '}
+            <CopyRequestUrl random_id={bin.random_id} />
+          </p>
         </div>
         <ul>
           {bin.requests.map((request) => (
