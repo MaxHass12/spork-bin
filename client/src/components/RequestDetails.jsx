@@ -7,7 +7,11 @@ function CopyIcon({ copyData }) {
     setTimeout(() => {
       event.target.classList.remove('copied');
     }, 1000);
-    navigator.clipboard.writeText(JSON.stringify(copyData));
+
+    const copyData2 = { ...copyData };
+    delete copyData2.id;
+
+    navigator.clipboard.writeText(JSON.stringify(copyData2));
   };
 
   return (
