@@ -378,3 +378,7 @@ button:hover {
 .content ul {
   list-style-type: none;
 }
+
+.centered-bin-details {
+  text-align: center;
+}

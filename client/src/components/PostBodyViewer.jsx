@@ -1,15 +1,16 @@
 import { useState } from 'react';
 
-const PostBodyViewer = ({ data }) => {
+const PostBodyViewer = ({ data, contentType }) => {
   const [isFormatted, setIsFormatted] = useState(true);
 
   const toggleView = () => setIsFormatted(!isFormatted);
 
-  const formatData = (data) => {
-    if (typeof data === 'object') {
+  const formatData = (data, contentType) => {
+    if (contentType === 'applicatioin/json') {
       return JSON.stringify(data, null, 2); // Pretty-print JSON
+    } else {
+      return data; // Return raw string or other formats
     }
-    return data; // Return raw string or other formats
   };
 
   return (
@@ -33,7 +34,9 @@ const PostBodyViewer = ({ data }) => {
         {isFormatted ? 'Show Raw' : 'Show Formatted'}
       </button>
 
-      <pre>{isFormatted ? formatData(data) : JSON.stringify(data)}</pre>
+      <pre>
+        {isFormatted ? formatData(data, contentType) : JSON.stringify(data)}
+      </pre>
     </div>
   );
 };

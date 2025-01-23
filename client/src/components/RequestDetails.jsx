@@ -60,7 +60,10 @@ const RequestDetails = ({ requestData }) => {
           </button>
           {isBodyVisible && (
             <div className="content">
-              <PostBodyViewer data={requestData.body} />
+              <PostBodyViewer
+                data={requestData.body}
+                contentType={requestData['content-type']}
+              />
             </div>
           )}
         </div>

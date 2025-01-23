@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import RequestDetails from './RequestDetails.jsx';
 import { getBinDetails } from '../service/bins.service';
+import BinDetailsWithRequests from './BinDetailsWithRequests.jsx';
 
 function BinDetails({ bins }) {
   const [bin, setBin] = useState(null);
@@ -38,7 +39,11 @@ function BinDetails({ bins }) {
   return (
     <div>
       {bin &&
-        (bin.requests.length === 0 ? <h1>Empty Bin</h1> : <h1>Bin Details</h1>)}
+        (bin.requests.length === 0 ? (
+          <h1>Empty Bin</h1>
+        ) : (
+          <BinDetailsWithRequests bin={bin} />
+        ))}
     </div>
   );
 }
