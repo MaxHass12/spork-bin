@@ -1,6 +1,27 @@
 import { useState } from 'react';
 import PostBodyViewer from './PostBodyViewer';
 
+function CopyIcon({ copyData }) {
+  const copyToClipboard = (event) => {
+    event.target.classList.add('copied');
+    setTimeout(() => {
+      event.target.classList.remove('copied');
+    }, 1000);
+    navigator.clipboard.writeText(JSON.stringify(copyData));
+  };
+
+  console.log(copyData);
+  return (
+    <span className="copyicon-span">
+      <i
+        id="copyIcon"
+        className="fas fa-copy copy-icon"
+        onClick={copyToClipboard}
+      ></i>
+    </span>
+  );
+}
+
 const RequestDetails = ({ requestData }) => {
   const [isHeaderVisible, setIsHeaderVisible] = useState(false);
   const [isBodyVisible, setIsBodyVisible] = useState(false);
@@ -24,9 +45,12 @@ const RequestDetails = ({ requestData }) => {
     setIsBodyVisible(!isBodyVisible);
   };
 
+  console.log(requestData);
   return (
     <div className="card">
-      <div className="card-header">{headerContent}</div>
+      <div className="card-header">
+        {headerContent} <CopyIcon copyData={requestData} />
+      </div>
       <div className="non-collapsible">
         <p>{dateContent}</p>
       </div>
