@@ -10,7 +10,6 @@ function CopyIcon({ copyData }) {
     navigator.clipboard.writeText(JSON.stringify(copyData));
   };
 
-  console.log(copyData);
   return (
     <span className="copyicon-span">
       <i

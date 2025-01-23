@@ -1,10 +1,11 @@
 import CopyRequestUrl from './CopyRequestUrl';
+import BinHeader from './BinHeader';
 
 const EmptyBin = ({ random_id }) => {
   return (
     <div className="header-container">
       <div className="main-card">
-        <h1 className="center">SporkBin: {random_id}</h1>
+        <BinHeader random_id={random_id} />
         <h1>No Requests Yet !</h1>
         <p>
           This bin is empty. Send requests to{' '}

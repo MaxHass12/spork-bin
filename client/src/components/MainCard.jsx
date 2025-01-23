@@ -50,7 +50,7 @@ function MainCard({ newRandomBinID, setBins, navigateToBin, navigateToHome }) {
             Close
           </button>
           <button className="card-button" onClick={handleOpenBasket}>
-            Open Basket
+            Open Bin
           </button>
         </div>
       </>

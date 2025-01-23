@@ -1,12 +1,13 @@
 import CopyRequestUrl from './CopyRequestUrl';
 import RequestDetails from './RequestDetails';
+import BinHeader from './BinHeader';
 
 function BinDetailsWithRequests({ bin }) {
   return (
     <div>
       <div className="card-container">
         <div className="centered-bin-details">
-          <h1>SporkBin : {bin.random_id}</h1>
+          <BinHeader random_id={bin.random_id} />
           <p>
             Requests are collected at{' '}
             <CopyRequestUrl random_id={bin.random_id} />

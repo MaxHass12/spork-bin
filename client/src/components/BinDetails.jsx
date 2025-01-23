@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { getBinDetails } from '../service/bins.service';
 import BinDetailsWithRequests from './BinDetailsWithRequests.jsx';
 import EmptyBin from './EmptyBin.jsx';
+import DeleteIcon from './DeleteIcon.jsx';
 
 function BinDetails({ bins }) {
   const [bin, setBin] = useState(null);
@@ -40,6 +41,7 @@ function BinDetails({ bins }) {
 
   return (
     <div>
+      {bin && <DeleteIcon />}
       {bin &&
         (bin.requests.length === 0 ? (
           <EmptyBin random_id={bin.random_id} />
