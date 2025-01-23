@@ -1,4 +1,4 @@
-import BinCreationModal from './BinCreationModal';
+import Modal from './Modal';
 import { useState } from 'react';
 import { createNewBin } from '../service/bins.service';
 
@@ -85,13 +85,13 @@ function MainCard({ newRandomBinID, setBins, navigateToBin, navigateToHome }) {
         <button type="submit" className="card-button">
           Create
         </button>
-        <BinCreationModal isOpen={isModalOpen} onClose={closeModal}>
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
           {isNewBinCreationSuccess ? (
             <SuccessModalContent />
           ) : (
             <ErrorModalContent />
           )}
-        </BinCreationModal>
+        </Modal>
       </form>
     </div>
   );

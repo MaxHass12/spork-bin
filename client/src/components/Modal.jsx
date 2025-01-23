@@ -1,4 +1,4 @@
-function BinCreationModal({ isOpen, onClose, children }) {
+function Modal({ isOpen, onClose, children }) {
   if (!isOpen) return null;
 
   return (
@@ -13,4 +13,4 @@ function BinCreationModal({ isOpen, onClose, children }) {
   );
 }
 
-export default BinCreationModal;
+export default Modal;

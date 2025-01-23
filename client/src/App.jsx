@@ -3,7 +3,6 @@ import MainNav from './components/MainNav';
 import MainCard from './components/MainCard';
 import SideList from './components/SideList';
 import { getAllBins, getNewRandomBinId } from './service/bins.service';
-import BinDetailsTmp from './components/BinDetailsTmp';
 import BinDetails from './components/BinDetails';
 
 function App() {
@@ -28,7 +27,7 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
-        alert('Could not load bins');
+        alert('Could not fetch bins');
       });
   }
 

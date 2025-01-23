@@ -1,4 +1,12 @@
 import { useState } from 'react';
+import {
+  JsonView,
+  collapseAllNested,
+  allExpanded,
+  darkStyles,
+  defaultStyles,
+} from 'react-json-view-lite';
+import 'react-json-view-lite/dist/index.css';
 
 const PostBodyViewer = ({ data, contentType }) => {
   const [isFormatted, setIsFormatted] = useState(true);
@@ -7,7 +15,21 @@ const PostBodyViewer = ({ data, contentType }) => {
 
   const formatData = (data, contentType) => {
     if (contentType === 'application/json') {
-      return JSON.stringify(data, null, 2); // Pretty-print JSON
+      return (
+        <JsonView
+          data={JSON.parse(data)}
+          collapseAllNested={true}
+          clickToExpandNode={true}
+        />
+      );
+    } else if (contentType === 'application/x-www-form-urlencoded') {
+      return (
+        <ul>
+          {data.split('&').map((pair, idx) => (
+            <li key={idx}>{pair}</li>
+          ))}
+        </ul>
+      );
     } else {
       return JSON.stringify(data); // Return raw string or other formats
     }
@@ -34,7 +56,6 @@ const PostBodyViewer = ({ data, contentType }) => {
       >
         {isFormatted ? 'Show Raw' : 'Show Formatted'}
       </button>
-      {/* {JSON.stringify(data, null, 2)} */}
       <pre>
         {isFormatted ? formatData(data, contentType) : JSON.stringify(data)}
       </pre>

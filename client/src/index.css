@@ -421,14 +421,21 @@ button:hover {
 }
 
 .delete-icon {
-  color: #e97451;
+  color: #a93232;
   font-size: 30px;
-  transition: color 0.3s;
 }
 
-.delete-icon.deleted {
-  animation: deleteAnimation 1s ease forwards;
+.delete-btn {
+  background-color: #a93232;
 }
+
+.delete-btn:hover {
+  background-color: #a93232;
+}
+
+/* .delete-icon.deleted {
+  animation: deleteAnimation 1s ease forwards;
+} */
 
 /* Click Animation */
 @keyframes clickAnimation {
