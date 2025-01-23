@@ -1,11 +1,5 @@
 import { useState } from 'react';
-import {
-  JsonView,
-  collapseAllNested,
-  allExpanded,
-  darkStyles,
-  defaultStyles,
-} from 'react-json-view-lite';
+import { JsonView } from 'react-json-view-lite';
 import 'react-json-view-lite/dist/index.css';
 
 const PostBodyViewer = ({ data, contentType }) => {
@@ -15,18 +9,16 @@ const PostBodyViewer = ({ data, contentType }) => {
 
   const formatData = (data, contentType) => {
     if (contentType === 'application/json') {
-      return (
-        <JsonView
-          data={JSON.parse(data)}
-          collapseAllNested={true}
-          clickToExpandNode={true}
-        />
-      );
+      if (typeof data === 'string') {
+        data = JSON.parse(data);
+      }
+
+      return <JsonView data={data} clickToExpandNode={true} />;
     } else if (contentType === 'application/x-www-form-urlencoded') {
       return (
         <ul>
           {data.split('&').map((pair, idx) => (
-            <li key={idx}>{pair}</li>
+            <li key={idx}>{decodeURI(pair)}</li>
           ))}
         </ul>
       );
