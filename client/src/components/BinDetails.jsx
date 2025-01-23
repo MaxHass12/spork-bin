@@ -27,11 +27,15 @@ function BinDetails({ bins }) {
       setBin(bin);
     });
 
-    setInterval(() => {
+    const intervalId = setInterval(() => {
       getBinDetails(binId.random_id).then((bin) => {
         setBin(bin);
       });
     }, 1500);
+
+    return () => {
+      clearInterval(intervalId);
+    };
   }, [bins]);
 
   return (
