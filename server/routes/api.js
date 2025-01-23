@@ -5,7 +5,7 @@ const { createPGTables, pgQueries } = require('../config/postgresDB');
 const { createNewBinID, binIDInUse, isValidBinID } = require('../utils/utils');
 const MongoRequest = require('../models/mongoRequest');
 
-// apiRouter.use(express.json());
+apiRouter.use(express.json());
 
 connectMongoDB();
 // createPGTables();

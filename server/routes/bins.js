@@ -9,11 +9,17 @@ createPGTables();
 
 function extractRequestData(req) {
   const binRandomID = req.params.random_id;
-  const { method, headers, originalUrl, body } = req;
+  const { method, headers, originalUrl } = req;
 
-  console.log('body from req.body: ', body);
+  // let rawBody = '';
+  // req.on('data', (chunk) => {
+  //   rawBody += chunk;
+  // });
+
+  // req.on('end', () => {
+  //   console.log('raw body from req.body: ', rawBody);
+  // });
   
-
   const timestamp = String(new Date());
   const date = timestamp.match(/[A-Z]{1}[a-z]{2} \d{2} \d{4}/)[0];
   const time = timestamp.match(/\d{2}:\d{2}:\d{2}/)[0];
@@ -25,14 +31,14 @@ function extractRequestData(req) {
     path: originalUrl,
     date,
     time,
-    body,
+    // body: rawBody,
   };
 }
 
 function formatRequestData(pgBinRequest, mongoRequestBody) {
   let body = mongoRequestBody['payload'];
   
-  if (!body || Object.keys(body).length === 0) {
+  if (!body) {
     body = null;
   } 
   
@@ -48,7 +54,17 @@ function formatRequestData(pgBinRequest, mongoRequestBody) {
 
 binsRouter.all('/:random_id([a-z0-9]{7})', async (req, res) => {
   try {
-    const { binRandomID, method, headers, path, date, time, body } = extractRequestData(req);
+    const { binRandomID, method, headers, path, date, time } = extractRequestData(req);
+
+    let rawBody = '';
+    req.on('data', (chunk) => {
+      rawBody += chunk;
+    });
+
+    req.on('end', () => {
+      console.log('raw body from req.body: ', rawBody);
+    });
+    
     const allBins = await pgQueries.getAllBins();
     
     if (isValidBinID(binRandomID) && binIDInUse(binRandomID, allBins)) {
@@ -59,7 +75,7 @@ binsRouter.all('/:random_id([a-z0-9]{7})', async (req, res) => {
       const newRequestBody = new MongoRequest({ 
         request_id: newBinRequest.id, 
         bin_id: newBinRequest.bin_id, 
-        payload: body, 
+        payload: rawBody, 
       });
       await newRequestBody.save();
       
