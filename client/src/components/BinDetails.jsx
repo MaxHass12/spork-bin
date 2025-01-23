@@ -27,11 +27,11 @@ function BinDetails({ bins }) {
       setBin(bin);
     });
 
-    // setInterval(() => {
-    //   getBinDetails(binId.random_id).then((bin) => {
-    //     setBin(bin);
-    //   });
-    // }, 1500);
+    setInterval(() => {
+      getBinDetails(binId.random_id).then((bin) => {
+        setBin(bin);
+      });
+    }, 1500);
   }, [bins]);
 
   return (

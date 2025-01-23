@@ -13,7 +13,7 @@ const PostBodyViewer = ({ data, contentType }) => {
     }
   };
 
-  console.log(data, contentType);
+  // console.log(data, contentType);
   return (
     <div
       style={{
