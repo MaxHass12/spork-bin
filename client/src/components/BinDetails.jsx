@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Request from './Requests.jsx'
 import { getBinDetails } from '../service/bins.service';
+import EmptyBin from './EmptyBin.jsx'
 
 
 
@@ -26,34 +27,31 @@ function BinDetails({ bins }) {
   
       getBinDetails(binId.random_id).then((bin) => {
         setBin(bin);
-        console.log(bin)
+        // console.log(bin.requests)
       });
     }, [bins]);
 
 
-
-  const copyToClipboard = () => {
-    console.log('link copied');
-    navigator.clipboard.writeText(`https://localhost:5173/${binTest.random_id}`)
-  }
 
   return (
    
    
    <div>
    {bin && <div>
+    {bin.requests.length === 0 ? <div> <EmptyBin name={bin.random_id} /></div> :
+      <div>
+        <h1>Requests are collected at </h1>
         <h1>Bin:{bin.random_id}</h1>
-        <h2>Requests are collected at </h2>
+
         <ul>
           {bin.requests.map(request => 
-            <Request props={request} name={bin.random_id}/>
+            <Request key={request.id} props={request} name={bin.random_id}/>
           )}
         </ul>
+
+      </div>}  
     </div>
-    }
-
-
-      
+    }      
     </div>
  
   )
