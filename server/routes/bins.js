@@ -11,6 +11,9 @@ function extractRequestData(req) {
   const binRandomID = req.params.random_id;
   const { method, headers, originalUrl, body } = req;
 
+  console.log('body from req.body: ', body);
+  
+
   const timestamp = String(new Date());
   const date = timestamp.match(/[A-Z]{1}[a-z]{2} \d{2} \d{4}/)[0];
   const time = timestamp.match(/\d{2}:\d{2}:\d{2}/)[0];
@@ -28,7 +31,6 @@ function extractRequestData(req) {
 
 function formatRequestData(pgBinRequest, mongoRequestBody) {
   let body = mongoRequestBody['payload'];
-  console.log('body from format: ', body);
   
   if (!body || Object.keys(body).length === 0) {
     body = null;

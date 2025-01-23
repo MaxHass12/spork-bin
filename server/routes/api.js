@@ -1,8 +1,11 @@
-const apiRouter = require('express').Router();
+const express = require('express');
+const apiRouter = express.Router();
 const { connectMongoDB } = require('../config/mongoDB');
 const { createPGTables, pgQueries } = require('../config/postgresDB');
 const { createNewBinID, binIDInUse, isValidBinID } = require('../utils/utils');
 const MongoRequest = require('../models/mongoRequest');
+
+// apiRouter.use(express.json());
 
 connectMongoDB();
 // createPGTables();
