@@ -15,9 +15,13 @@ const PostBodyViewer = ({ data, contentType }) => {
 
   const formatData = (data, contentType) => {
     if (contentType === 'application/json') {
+      if (typeof data === 'string') {
+        data = JSON.parse(data);
+      }
+
       return (
         <JsonView
-          data={JSON.parse(data)}
+          data={data}
           collapseAllNested={true}
           clickToExpandNode={true}
         />

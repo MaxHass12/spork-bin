@@ -377,10 +377,18 @@ button:hover {
   font-size: 1rem;
   line-height: 1.6;
   border-top: 1px solid #ccc;
+  word-wrap: break-word;
+  /* white-space: normal; */
 }
 
 .content ul {
   list-style-type: none;
+}
+
+.content ul > li {
+  word-wrap: break-word; /* Enables breaking of long words */
+  word-break: break-all; /* Forces word breaking if necessary */
+  white-space: normal; /* Allows text to wrap to the next line */
 }
 
 .centered-bin-details {
